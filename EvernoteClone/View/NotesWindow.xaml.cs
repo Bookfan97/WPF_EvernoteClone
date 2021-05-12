@@ -21,5 +21,11 @@ namespace EvernoteClone.View
         {
             InitializeComponent();
         }
+
+        //Closes the application
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }

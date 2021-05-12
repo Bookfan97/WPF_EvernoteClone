@@ -22,6 +22,7 @@ namespace EvernoteClone.ViewModel.Commands
         public void Execute(object parameter)
         {
             //TODO: Add functionality
+            VM.CreateNotebook();
         }
 
         public event EventHandler CanExecuteChanged;
