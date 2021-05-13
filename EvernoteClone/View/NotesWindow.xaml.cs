@@ -32,5 +32,28 @@ namespace EvernoteClone.View
         private void SpeechButton_Click(object sender, RoutedEventArgs e)
         {
         }
+
+        //Gets character count
+        private void ContentRichTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            int characterCount = (new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd)).Text.Length;
+            statusTextBlock.Text = $"Length: {characterCount} characters";
+        }
+
+        //Set Text to Bold
+        private void BoldButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontWeightProperty, FontWeights.Bold);
+        }
+
+        private void ItalicsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontStyleProperty, FontStyles.Italic);
+        }
+
+        private void UnderlineButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            contentRichTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace EvernoteClone.ViewModel.Helpers
         }
 
         //Read list from table
-        public static List<T> Read<T>(T item) where T : new()
+        public static List<T> Read<T>() where T : new()
         {
             List<T> items;
 
