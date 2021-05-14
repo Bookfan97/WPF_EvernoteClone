@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using EvernoteClone.Model;
 using SQLite;
 
 namespace EvernoteClone.ViewModel.Helpers
@@ -42,6 +43,36 @@ namespace EvernoteClone.ViewModel.Helpers
             };
 
             return items;
+        }
+
+
+        public static bool Update<T>(T item)
+        {
+            bool result = false;
+
+            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
+            {
+                conn.CreateTable<T>();
+                int rows = conn.Update(item);
+                if (rows > 0)
+                    result = true;
+            }
+
+            return result;
+        }
+        public static bool Delete<T>(T item)
+        {
+            bool result = false;
+
+            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
+            {
+                conn.CreateTable<T>();
+                int rows = conn.Delete(item);
+                if (rows > 0)
+                    result = true;
+            }
+
+            return result;
         }
     }
 }

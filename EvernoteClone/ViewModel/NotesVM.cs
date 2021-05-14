@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Windows;
 using EvernoteClone.Annotations;
 using EvernoteClone.Model;
 using EvernoteClone.ViewModel.Commands;
@@ -18,6 +19,9 @@ namespace EvernoteClone.ViewModel
         public ObservableCollection<Note> Notes { get; set; }
         public NewNotebookCommand NewNotebookCommand { get; set; }
         public NewNoteCommand NewNoteCommand { get; set; }
+        public EditCommand EditCommand { get; set; }
+        public EndEditCommand EndEditCommand { get; set; }
+
         private Notebook selectedNotebook;
 
         public Notebook SelectedNotebook
@@ -31,12 +35,27 @@ namespace EvernoteClone.ViewModel
             }
         }
 
+        private Visibility isVisibie;
+
+        public Visibility IsVisibie
+        {
+            get { return isVisibie; }
+            set
+            {
+                isVisibie = value;
+                OnPropertyChanged("IsVisibie");
+            }
+        }
+
         public NotesVM()
         {
             NewNoteCommand = new NewNoteCommand(this);
             NewNotebookCommand = new NewNotebookCommand(this);
             Notebooks = new ObservableCollection<Notebook>();
             Notes = new ObservableCollection<Note>();
+            EditCommand = new EditCommand(this);
+            EndEditCommand = new EndEditCommand(this);
+            IsVisibie = Visibility.Collapsed;
             GetNotebooks();
         }
 
@@ -92,6 +111,18 @@ namespace EvernoteClone.ViewModel
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void StartEditing()
+        {
+            IsVisibie = Visibility.Visible;
+        }
+        
+        public void StopEditing(Notebook notebook)
+        {
+            IsVisibie = Visibility.Collapsed;
+            DatabaseHelper.Update(notebook);
+            GetNotebooks();
         }
     }
 }
