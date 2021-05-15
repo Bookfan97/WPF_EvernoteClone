@@ -22,6 +22,7 @@ namespace EvernoteClone.ViewModel
         public EditCommand EditCommand { get; set; }
         public EndEditCommand EndEditCommand { get; set; }
 
+        public event EventHandler SelectedNoteChanged;
         private Notebook selectedNotebook;
 
         public Notebook SelectedNotebook
@@ -35,15 +36,27 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-        private Visibility isVisibie;
+        private Note selectedNote;
 
-        public Visibility IsVisibie
+        public Note SelectedNote
         {
-            get { return isVisibie; }
+            get { return selectedNote; }
             set
             {
-                isVisibie = value;
-                OnPropertyChanged("IsVisibie");
+                selectedNote = value;
+                OnPropertyChanged("SelectedNote");
+                SelectedNoteChanged?.Invoke(this, new EventArgs());
+            }
+        }
+        private Visibility isVisible;
+
+        public Visibility IsVisible
+        {
+            get { return isVisible; }
+            set
+            {
+                isVisible = value;
+                OnPropertyChanged("IsVisible");
             }
         }
 
@@ -55,7 +68,7 @@ namespace EvernoteClone.ViewModel
             Notes = new ObservableCollection<Note>();
             EditCommand = new EditCommand(this);
             EndEditCommand = new EndEditCommand(this);
-            IsVisibie = Visibility.Collapsed;
+            IsVisible = Visibility.Collapsed;
             GetNotebooks();
         }
 
@@ -115,12 +128,12 @@ namespace EvernoteClone.ViewModel
 
         public void StartEditing()
         {
-            IsVisibie = Visibility.Visible;
+            IsVisible = Visibility.Visible;
         }
-        
+
         public void StopEditing(Notebook notebook)
         {
-            IsVisibie = Visibility.Collapsed;
+            IsVisible = Visibility.Collapsed;
             DatabaseHelper.Update(notebook);
             GetNotebooks();
         }

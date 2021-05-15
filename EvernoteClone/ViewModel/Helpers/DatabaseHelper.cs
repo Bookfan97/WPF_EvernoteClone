@@ -9,7 +9,7 @@ namespace EvernoteClone.ViewModel.Helpers
 {
     public class DatabaseHelper
     {
-        private static readonly string dbFile = Path.Combine(Environment.CurrentDirectory, "notesDb.db3");
+        private static string dbFile = Path.Combine(Environment.CurrentDirectory, "notesDb.db3");
 
         //Insert list into table
         public static bool Insert<T>(T item)
@@ -25,7 +25,37 @@ namespace EvernoteClone.ViewModel.Helpers
                 {
                     result = true;
                 }
-            };
+            }
+
+            return result;
+        }
+
+        public static bool Update<T>(T item)
+        {
+            bool result = false;
+
+            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
+            {
+                conn.CreateTable<T>();
+                int rows = conn.Update(item);
+                if (rows > 0)
+                    result = true;
+            }
+
+            return result;
+        }
+
+        public static bool Delete<T>(T item)
+        {
+            bool result = false;
+
+            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
+            {
+                conn.CreateTable<T>();
+                int rows = conn.Delete(item);
+                if (rows > 0)
+                    result = true;
+            }
 
             return result;
         }
@@ -43,36 +73,6 @@ namespace EvernoteClone.ViewModel.Helpers
             };
 
             return items;
-        }
-
-
-        public static bool Update<T>(T item)
-        {
-            bool result = false;
-
-            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
-            {
-                conn.CreateTable<T>();
-                int rows = conn.Update(item);
-                if (rows > 0)
-                    result = true;
-            }
-
-            return result;
-        }
-        public static bool Delete<T>(T item)
-        {
-            bool result = false;
-
-            using (SQLiteConnection conn = new SQLiteConnection(dbFile))
-            {
-                conn.CreateTable<T>();
-                int rows = conn.Delete(item);
-                if (rows > 0)
-                    result = true;
-            }
-
-            return result;
         }
     }
 }

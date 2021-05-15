@@ -5,9 +5,9 @@ using SQLite;
 
 namespace EvernoteClone.Model
 {
-    internal class User
+    public class User
     {
-        [PrimaryKey]
+        [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
         [MaxLength(50)]
