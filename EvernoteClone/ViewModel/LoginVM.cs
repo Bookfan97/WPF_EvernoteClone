@@ -14,6 +14,7 @@ namespace EvernoteClone.ViewModel
 {
     internal class LoginVM: INotifyPropertyChanged
     {
+        public event EventHandler Authenticated;
         private User user;
         private bool isShowingRegister = false;
         public User User
@@ -100,7 +101,7 @@ namespace EvernoteClone.ViewModel
                     Lastname = lastname,
                     ConfirmPassword = this.ConfirmPassword
                 };
-                OnPropertyChanged("Lastame");
+                OnPropertyChanged("Lastname");
             }
         }
 
@@ -175,14 +176,22 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-        public void Login()
+        public async Task Login()
         {
-            //TODO: Login
+           bool result = await FirebaseAuthHelper.Login(User);
+           if (result)
+           {
+               Authenticated?.Invoke(this, new EventArgs());
+           }
         }
         
         public async Task Register()
         {
-            await FirebaseAuthHelper.Register(User);
+            bool result = await FirebaseAuthHelper.Register(User);
+            if (result)
+            {
+                
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

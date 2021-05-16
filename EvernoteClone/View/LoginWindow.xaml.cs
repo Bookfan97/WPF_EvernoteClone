@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using EvernoteClone.ViewModel;
 
 namespace EvernoteClone.View
 {
@@ -17,9 +18,17 @@ namespace EvernoteClone.View
     /// </summary>
     public partial class LoginWindow : Window
     {
+        private LoginVM viewModel;
         public LoginWindow()
         {
             InitializeComponent();
+            viewModel = Resources["Vm"] as LoginVM;
+            viewModel.Authenticated += viewModel_Authenticated;
+        }
+
+        private void viewModel_Authenticated(object? sender, EventArgs e)
+        {
+            Close();
         }
     }
 }
