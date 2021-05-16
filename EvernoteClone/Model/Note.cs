@@ -5,13 +5,15 @@ using SQLite;
 
 namespace EvernoteClone.Model
 {
-    public class Note
+    public interface HasID
     {
-        [PrimaryKey, AutoIncrement]
-        public int ID { get; set; }
+        public string ID { get; set; }
+    }
 
-        [Indexed]
-        public int NotebookID { get; set; }
+    public class Note : HasID
+    {
+        public string ID { get; set; }
+        public string NotebookID { get; set; }
         public string Title { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

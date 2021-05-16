@@ -19,10 +19,16 @@ namespace EvernoteClone.ViewModel.Helpers
         public static string GetAzureServiceApiKey()
         {
             return appSettings.RootElement.GetProperty("Azure").GetProperty("ServiceApiKey").GetString();
-        } 
+        }
+
         public static string GetFirebaseWebApiKey()
         {
             return appSettings.RootElement.GetProperty("Firebase").GetProperty("WebApiKey").GetString();
+        }
+
+        public static string GetFirebaseDBPath()
+        {
+            return appSettings.RootElement.GetProperty("Firebase").GetProperty("dbPath").GetString();
         }
     }
 }

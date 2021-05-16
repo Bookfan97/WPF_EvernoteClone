@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using EvernoteClone.Annotations;
 using EvernoteClone.Model;
@@ -72,33 +73,33 @@ namespace EvernoteClone.ViewModel
             GetNotebooks();
         }
 
-        public void CreateNote(int notebookID)
+        public async Task CreateNote(string notebookID)
         {
             Note newNote = new Note()
             {
                 NotebookID = notebookID,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                Title = $"New Note publiceTime.Now.ToString()"
+                Title = $"Note for {DateTime.Now.ToString()}"
             };
-            DatabaseHelper.Insert(newNote);
+            await DatabaseHelper.Insert(newNote);
             GetNotes();
         }
 
-        public void CreateNotebook()
+        public async Task CreateNotebook()
         {
             Notebook newNotebook = new Notebook()
             {
                 Name = "New Notebook",
                 UserId = App.UserID
             };
-            DatabaseHelper.Insert(newNotebook);
+            await DatabaseHelper.Insert(newNotebook);
             GetNotebooks();
         }
 
-        public void GetNotebooks()
+        public async Task GetNotebooks()
         {
-            IEnumerable<Notebook> notebooks = DatabaseHelper.Read<Notebook>().Where(n => n.UserId == App.UserID).ToList();
+            IEnumerable<Notebook> notebooks = (await DatabaseHelper.Read<Notebook>()).Where(n => n.UserId == App.UserID).ToList();
             Notebooks.Clear();
             foreach (var notebook in notebooks)
             {
@@ -106,11 +107,11 @@ namespace EvernoteClone.ViewModel
             }
         }
 
-        private void GetNotes()
+        private async Task GetNotes()
         {
             if (selectedNotebook != null)
             {
-                IEnumerable<Note> notes = DatabaseHelper.Read<Note>().Where(n => n.NotebookID == SelectedNotebook.Id).ToList();
+                IEnumerable<Note> notes = (await DatabaseHelper.Read<Note>()).Where(n => n.NotebookID == SelectedNotebook.ID).ToList();
                 Notes.Clear();
                 foreach (var note in notes)
                 {

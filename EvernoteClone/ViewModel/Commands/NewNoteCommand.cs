@@ -24,7 +24,7 @@ namespace EvernoteClone.ViewModel.Commands
         public void Execute(object parameter)
         {
             Notebook selectedNotebook = parameter as Notebook;
-            ViewModel.CreateNote(selectedNotebook.Id);
+            ViewModel.CreateNote(selectedNotebook.ID);
         }
 
         public event EventHandler CanExecuteChanged
