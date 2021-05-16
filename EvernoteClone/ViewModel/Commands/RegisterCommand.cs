@@ -6,8 +6,7 @@ using EvernoteClone.Model;
 
 namespace EvernoteClone.ViewModel.Commands
 {
-    //Command for the register button
-    internal class RegisterCommand : ICommand
+    public class RegisterCommand : ICommand
     {
         public LoginVM VM { get; set; }
 
@@ -35,6 +34,10 @@ namespace EvernoteClone.ViewModel.Commands
             VM.Register();
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+		{
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
     }
 }

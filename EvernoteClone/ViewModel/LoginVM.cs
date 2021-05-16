@@ -12,11 +12,12 @@ using EvernoteClone.ViewModel.Helpers;
 
 namespace EvernoteClone.ViewModel
 {
-    internal class LoginVM: INotifyPropertyChanged
+    public class LoginVM : INotifyPropertyChanged
     {
         public event EventHandler Authenticated;
         private User user;
         private bool isShowingRegister = false;
+
         public User User
         {
             get { return user; }
@@ -40,7 +41,7 @@ namespace EvernoteClone.ViewModel
                     Username = username,
                     Password = this.Password,
                     Name = this.Name,
-                    Lastname = this.Lastame,
+                    Lastname = this.Lastname,
                     ConfirmPassword = this.ConfirmPassword
                 };
                 OnPropertyChanged("Username");
@@ -54,13 +55,13 @@ namespace EvernoteClone.ViewModel
             get { return password; }
             set
             {
-                password = value; 
+                password = value;
                 User = new User
                 {
                     Username = this.Username,
                     Password = password,
                     Name = this.Name,
-                    Lastname = this.Lastame,
+                    Lastname = this.Lastname,
                     ConfirmPassword = this.ConfirmPassword
                 };
                 OnPropertyChanged("Password");
@@ -68,6 +69,7 @@ namespace EvernoteClone.ViewModel
         }
 
         private string name;
+
         public string Name
         {
             get { return name; }
@@ -79,7 +81,7 @@ namespace EvernoteClone.ViewModel
                     Username = this.Username,
                     Password = this.Password,
                     Name = name,
-                    Lastname = this.Lastame,
+                    Lastname = this.Lastname,
                     ConfirmPassword = this.ConfirmPassword
                 };
                 OnPropertyChanged("Name");
@@ -87,7 +89,8 @@ namespace EvernoteClone.ViewModel
         }
 
         private string lastname;
-        public string Lastame
+
+        public string Lastname
         {
             get { return lastname; }
             set
@@ -106,6 +109,7 @@ namespace EvernoteClone.ViewModel
         }
 
         private string confirmPassword;
+
         public string ConfirmPassword
         {
             get { return confirmPassword; }
@@ -117,25 +121,27 @@ namespace EvernoteClone.ViewModel
                     Username = this.Username,
                     Password = this.Password,
                     Name = this.Name,
-                    Lastname = this.Lastame,
+                    Lastname = this.Lastname,
                     ConfirmPassword = confirmPassword
                 };
                 OnPropertyChanged("ConfirmPassword");
             }
         }
 
-        private Visibility LoginVisibility;
-        public Visibility LoginVis
+        private Visibility loginVisibility;
+
+        public Visibility LoginVisibility
         {
-            get { return LoginVisibility; }
+            get { return loginVisibility; }
             set
             {
-                LoginVisibility = value;
+                loginVisibility = value;
                 OnPropertyChanged("LoginVisibility");
             }
         }
-        
+
         private Visibility registerVisibility;
+
         public Visibility RegisterVisibility
         {
             get { return registerVisibility; }
@@ -178,19 +184,19 @@ namespace EvernoteClone.ViewModel
 
         public async Task Login()
         {
-           bool result = await FirebaseAuthHelper.Login(User);
-           if (result)
-           {
-               Authenticated?.Invoke(this, new EventArgs());
-           }
+            bool result = await FirebaseAuthHelper.Login(User);
+            if (result)
+            {
+                Authenticated?.Invoke(this, new EventArgs());
+            }
         }
-        
+
         public async Task Register()
         {
             bool result = await FirebaseAuthHelper.Register(User);
             if (result)
             {
-                
+                Authenticated?.Invoke(this, new EventArgs());
             }
         }
 

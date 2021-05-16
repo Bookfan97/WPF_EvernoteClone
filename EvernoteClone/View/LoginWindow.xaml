@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         mc:Ignorable="d"
         Title="LoginWindow" Height="300" Width="300">
- <Window.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <vm:LoginVM x:Key="vm"/>
         </ResourceDictionary>
@@ -36,7 +36,7 @@
         </StackPanel>
         <StackPanel Visibility="{Binding RegisterVisibility}"
                     Margin="10,0">
-            <TextBlock Text="Username:"/>
+            <TextBlock Text="Email:"/>
             <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Name:"/>
             <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

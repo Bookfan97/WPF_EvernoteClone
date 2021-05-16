@@ -7,7 +7,7 @@ using EvernoteClone.Model;
 namespace EvernoteClone.ViewModel.Commands
 {
     //Command for the login button
-    internal class LoginCommand : ICommand
+    public class LoginCommand : ICommand
     {
         public LoginVM VM { get; set; }
 
@@ -32,6 +32,10 @@ namespace EvernoteClone.ViewModel.Commands
             VM.Login();
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
     }
 }

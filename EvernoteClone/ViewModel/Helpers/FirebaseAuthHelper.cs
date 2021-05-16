@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace EvernoteClone.ViewModel.Helpers
 {
-    class FirebaseAuthHelper
+    public class FirebaseAuthHelper
     {
         private static string api_key = SecretsHelper.GetFirebaseWebApiKey();
 

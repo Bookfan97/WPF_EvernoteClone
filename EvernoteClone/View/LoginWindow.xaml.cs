@@ -18,15 +18,16 @@ namespace EvernoteClone.View
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private LoginVM viewModel;
+        LoginVM viewModel;
         public LoginWindow()
         {
             InitializeComponent();
-            viewModel = Resources["Vm"] as LoginVM;
-            viewModel.Authenticated += viewModel_Authenticated;
+
+            viewModel = Resources["vm"] as LoginVM;
+            viewModel.Authenticated += ViewModel_Authenticated;
         }
 
-        private void viewModel_Authenticated(object? sender, EventArgs e)
+        private void ViewModel_Authenticated(object sender, EventArgs e)
         {
             Close();
         }
