@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using EvernoteClone.Annotations;
 using EvernoteClone.Model;
 using EvernoteClone.ViewModel.Commands;
+using EvernoteClone.ViewModel.Helpers;
 
 namespace EvernoteClone.ViewModel
 {
@@ -178,9 +180,9 @@ namespace EvernoteClone.ViewModel
             //TODO: Login
         }
         
-        public void Register()
+        public async Task Register()
         {
-            //TODO: Login
+            await FirebaseAuthHelper.Register(User);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
