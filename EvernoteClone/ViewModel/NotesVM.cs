@@ -79,7 +79,7 @@ namespace EvernoteClone.ViewModel
                 NotebookID = notebookID,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
-                Title = $"New Note at {DateTime.Now.ToString()}"
+                Title = $"New Note publiceTime.Now.ToString()"
             };
             DatabaseHelper.Insert(newNote);
             GetNotes();
@@ -95,7 +95,7 @@ namespace EvernoteClone.ViewModel
             GetNotebooks();
         }
 
-        private void GetNotebooks()
+        public void GetNotebooks()
         {
             IEnumerable<Notebook> notebooks = DatabaseHelper.Read<Notebook>();
             Notebooks.Clear();

@@ -62,6 +62,17 @@ namespace EvernoteClone.View
             Application.Current.Shutdown();
         }
 
+        protected override void OnActivated(EventArgs e)
+        {
+            base.OnActivated(e);
+            if (String.IsNullOrEmpty(App.UserID))
+            {
+                LoginWindow loginWindow = new LoginWindow();
+                loginWindow.ShowDialog();
+                viewModel.GetNotebooks();
+            }
+        }
+
         //Speech Button
         private async void SpeechButton_Click(object sender, RoutedEventArgs e)
         {
