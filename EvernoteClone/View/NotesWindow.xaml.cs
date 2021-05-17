@@ -19,6 +19,7 @@ using EvernoteClone.ViewModel.Helpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using System.IO;
+using System.Net.Http;
 using Azure.Storage.Blobs;
 
 namespace EvernoteClone.View
@@ -44,20 +45,21 @@ namespace EvernoteClone.View
             fontSizeComboBox.ItemsSource = fontSizes;
         }
 
-        private async Task ViewModel_SelectedNoteChanged(object sender, EventArgs e)
+        private async void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
         {
             contentRichTextBox.Document.Blocks.Clear();
             if (viewModel.SelectedNote != null)
             {
                 if (!string.IsNullOrEmpty(viewModel.SelectedNote.FileLocation))
                 {
-                    string downloadPath = $"{viewModel.SelectedNote.ID}.rtf";
-                    await new BlobClient(new Uri(viewModel.SelectedNote.FileLocation)).DownloadToAsync(downloadPath);
-                    using (FileStream fileStream = new FileStream(downloadPath, FileMode.Open))
+                    Stream rtfFileStream = null;
+                    using (HttpClient client = new HttpClient())
                     {
-                        var contents = new TextRange(contentRichTextBox.Document.ContentStart,
-                            contentRichTextBox.Document.ContentEnd);
-                        contents.Load(fileStream, DataFormats.Rtf);
+                        var response = await client.GetAsync(viewModel.SelectedNote.FileLocation);
+                        rtfFileStream = await response.Content.ReadAsStreamAsync();
+
+                        TextRange range = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
+                        range.Load(rtfFileStream, DataFormats.Rtf);
                     }
                 }
             }
