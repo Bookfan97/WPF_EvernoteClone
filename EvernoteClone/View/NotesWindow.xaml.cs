@@ -19,6 +19,7 @@ using EvernoteClone.ViewModel.Helpers;
 using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using System.IO;
+using Azure.Storage.Blobs;
 
 namespace EvernoteClone.View
 {
@@ -43,16 +44,21 @@ namespace EvernoteClone.View
             fontSizeComboBox.ItemsSource = fontSizes;
         }
 
-        private void ViewModel_SelectedNoteChanged(object sender, EventArgs e)
+        private async Task ViewModel_SelectedNoteChanged(object sender, EventArgs e)
         {
             contentRichTextBox.Document.Blocks.Clear();
             if (viewModel.SelectedNote != null)
             {
                 if (!string.IsNullOrEmpty(viewModel.SelectedNote.FileLocation))
                 {
-                    FileStream fileStream = new FileStream(viewModel.SelectedNote.FileLocation, FileMode.Open);
-                    var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
-                    contents.Load(fileStream, DataFormats.Rtf);
+                    string downloadPath = $"{viewModel.SelectedNote.ID}.rtf";
+                    await new BlobClient(new Uri(viewModel.SelectedNote.FileLocation)).DownloadToAsync(downloadPath);
+                    using (FileStream fileStream = new FileStream(downloadPath, FileMode.Open))
+                    {
+                        var contents = new TextRange(contentRichTextBox.Document.ContentStart,
+                            contentRichTextBox.Document.ContentEnd);
+                        contents.Load(fileStream, DataFormats.Rtf);
+                    }
                 }
             }
         }
@@ -76,7 +82,8 @@ namespace EvernoteClone.View
         //Speech Button
         private async void SpeechButton_Click(object sender, RoutedEventArgs e)
         {
-            var speechConfig = SpeechConfig.FromSubscription(SecretsHelper.GetAzureServiceApiKey(), SecretsHelper.GetAzureRegion());
+            var speechConfig =
+                SpeechConfig.FromSubscription(SecretsHelper.GetAzureServiceApiKey(), SecretsHelper.GetAzureRegion());
             using (var audioConfig = AudioConfig.FromDefaultMicrophoneInput())
             using (var recognizer = new SpeechRecognizer(speechConfig, audioConfig))
             {
@@ -88,7 +95,9 @@ namespace EvernoteClone.View
         //Gets character count
         private void ContentRichTextBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            int characterCount = (new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd)).Text.Length;
+            int characterCount =
+                (new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd)).Text
+                .Length;
             statusTextBlock.Text = $"Length: {characterCount} characters";
         }
 
@@ -126,12 +135,14 @@ namespace EvernoteClone.View
             bool isButtonChecked = (sender as ToggleButton).IsChecked ?? false;
             if (isButtonChecked)
             {
-                contentRichTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+                contentRichTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty,
+                    TextDecorations.Underline);
             }
             else
             {
                 TextDecorationCollection textDecorations;
-                (contentRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty) as TextDecorationCollection).TryRemove(TextDecorations.Underline, out textDecorations);
+                (contentRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty) as
+                    TextDecorationCollection).TryRemove(TextDecorations.Underline, out textDecorations);
                 contentRichTextBox.Selection.ApplyPropertyValue(Inline.TextDecorationsProperty, textDecorations);
             }
         }
@@ -142,9 +153,12 @@ namespace EvernoteClone.View
             var selectedBold = contentRichTextBox.Selection.GetPropertyValue(FontWeightProperty);
             var selectedItalic = contentRichTextBox.Selection.GetPropertyValue(FontStyleProperty);
             var selectedUnderline = contentRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
-            BoldButton.IsChecked = (selectedBold != DependencyProperty.UnsetValue) && (selectedBold.Equals(FontWeights.Bold));
-            ItalicsButton.IsChecked = (selectedItalic != DependencyProperty.UnsetValue) && (selectedItalic.Equals(FontStyles.Italic));
-            UnderlineButton.IsChecked = (selectedUnderline != DependencyProperty.UnsetValue) && (selectedUnderline.Equals(TextDecorations.Underline));
+            BoldButton.IsChecked = (selectedBold != DependencyProperty.UnsetValue) &&
+                                   (selectedBold.Equals(FontWeights.Bold));
+            ItalicsButton.IsChecked = (selectedItalic != DependencyProperty.UnsetValue) &&
+                                      (selectedItalic.Equals(FontStyles.Italic));
+            UnderlineButton.IsChecked = (selectedUnderline != DependencyProperty.UnsetValue) &&
+                                        (selectedUnderline.Equals(TextDecorations.Underline));
             fontFamilyComboBox.SelectedItem = contentRichTextBox.Selection.GetPropertyValue(Inline.FontStyleProperty);
             fontSizeComboBox.Text = contentRichTextBox.Selection.GetPropertyValue(Inline.FontSizeProperty).ToString();
         }
@@ -153,7 +167,8 @@ namespace EvernoteClone.View
         {
             if (fontFamilyComboBox.SelectedItem != null)
             {
-                contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontFamilyProperty, fontFamilyComboBox.SelectedItem);
+                contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontFamilyProperty,
+                    fontFamilyComboBox.SelectedItem);
             }
         }
 
@@ -167,15 +182,31 @@ namespace EvernoteClone.View
             contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeComboBox.Text);
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            string rtfFile = System.IO.Path.Combine(Environment.CurrentDirectory, $"{viewModel.SelectedNote.ID}.rtf");
-            viewModel.SelectedNote.FileLocation = rtfFile;
-            DatabaseHelper.Update(viewModel.SelectedNote);
+            string fileName = $"{viewModel.SelectedNote.ID}.rtf";
+            string rtfFile = System.IO.Path.Combine(Environment.CurrentDirectory, fileName);
 
-            FileStream fileStream = new FileStream(rtfFile, FileMode.Create);
-            var contents = new TextRange(contentRichTextBox.Document.ContentStart, contentRichTextBox.Document.ContentEnd);
-            contents.Save(fileStream, DataFormats.Rtf);
+            using (FileStream fileStream = new FileStream(rtfFile, FileMode.Create))
+            {
+                var contents = new TextRange(contentRichTextBox.Document.ContentStart,
+                    contentRichTextBox.Document.ContentEnd);
+                contents.Save(fileStream, DataFormats.Rtf);
+            }
+            viewModel.SelectedNote.FileLocation = await UpdateFile(rtfFile, fileName);
+            await DatabaseHelper.Update(viewModel.SelectedNote);
+        }
+
+        private async Task<string> UpdateFile(string file, string rtfFile)
+        {
+            string connectionString = SecretsHelper.GetAzureConnectionString();
+            string containerName = SecretsHelper.GetAzureContainerName();
+            string containerURL = SecretsHelper.GetAzureContainerURL();
+            var container = new BlobContainerClient(connectionString, containerName);
+            container.CreateIfNotExistsAsync();
+            var blob = container.GetBlobClient(rtfFile);
+            await blob.UploadAsync(rtfFile);
+            return $"{containerURL}/{rtfFile}";
         }
     }
 }
