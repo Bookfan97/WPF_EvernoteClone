@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <UserSecretsId>91145540-7e73-46cd-93e5-8586d57f7fdf</UserSecretsId>
+    <ApplicationIcon>notes.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
