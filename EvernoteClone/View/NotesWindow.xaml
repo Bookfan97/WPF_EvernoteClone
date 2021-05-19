@@ -75,11 +75,14 @@
                 </ToggleButton>
                 <ComboBox x:Name="fontFamilyComboBox" Width="100" SelectionChanged="FontSizeComboBox_OnSelectionChanged"/>
                 <ComboBox x:Name="fontSizeComboBox" Width="50" IsEditable="True" TextBoxBase.TextChanged="FontSizeComboBox_OnTextChanged"/>
-                <Button Content="Save" Click="Button_Click"/>
+                <Button Content="Save" Click="SaveButton_Click"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <RichTextBox x:Name="contentRichTextBox" TextChanged="ContentRichTextBox_OnTextChanged" SelectionChanged="ContentRichTextBox_OnSelectionChanged"/>
+            <StackPanel>
+                <TextBox Margin="10" Text="{Binding Path=SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <RichTextBox x:Name="contentRichTextBox" TextChanged="ContentRichTextBox_OnTextChanged" SelectionChanged="ContentRichTextBox_OnSelectionChanged"/>
+            </StackPanel>
         </Grid>
     </DockPanel>
 </Window>

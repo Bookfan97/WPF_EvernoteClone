@@ -21,6 +21,7 @@ using Microsoft.CognitiveServices.Speech.Audio;
 using System.IO;
 using System.Net.Http;
 using Azure.Storage.Blobs;
+using Microsoft.WindowsAzure.Storage;
 
 namespace EvernoteClone.View
 {
@@ -184,7 +185,7 @@ namespace EvernoteClone.View
             contentRichTextBox.Selection.ApplyPropertyValue(Inline.FontSizeProperty, fontSizeComboBox.Text);
         }
 
-        private async void Button_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             string fileName = $"{viewModel.SelectedNote.ID}.rtf";
             string rtfFile = System.IO.Path.Combine(Environment.CurrentDirectory, fileName);
@@ -195,8 +196,24 @@ namespace EvernoteClone.View
                     contentRichTextBox.Document.ContentEnd);
                 contents.Save(fileStream, DataFormats.Rtf);
             }
-            viewModel.SelectedNote.FileLocation = await UpdateFile(rtfFile, fileName);
-            await DatabaseHelper.Update(viewModel.SelectedNote);
+            string fileUrl = await UploadFile(rtfFile, fileName);
+            viewModel.SelectedNote.FileLocation = fileUrl;
+            viewModel.UpdateSelectedNote();
+        }
+
+        private async Task<string> UploadFile(string rtfFile, string fileName)
+        {
+            string file = string.Empty;
+            var account = CloudStorageAccount.Parse(SecretsHelper.GetAzureConnectionString());
+            var client = account.CreateCloudBlobClient();
+            var container = client.GetContainerReference("notes");
+            var blob = container.GetBlockBlobReference(fileName);
+            using (FileStream fileStream = new FileStream(rtfFile, FileMode.Open))
+            {
+                await blob.UploadFromStreamAsync(fileStream);
+                file = blob.Uri.OriginalString;
+            }
+            return file;
         }
 
         private async Task<string> UpdateFile(string file, string rtfFile)

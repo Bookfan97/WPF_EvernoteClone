@@ -139,5 +139,10 @@ namespace EvernoteClone.ViewModel
             DatabaseHelper.Update(notebook);
             GetNotebooks();
         }
+
+        public void UpdateSelectedNote()
+        {
+            DatabaseHelper.Update(selectedNote);
+        }
     }
 }
