@@ -21,6 +21,7 @@ namespace EvernoteClone.ViewModel
         public NewNotebookCommand NewNotebookCommand { get; set; }
         public NewNoteCommand NewNoteCommand { get; set; }
         public EditCommand EditCommand { get; set; }
+        public DeleteNotebookCommand DeleteNotebookCommand { get; set; }
         public EndEditCommand EndEditCommand { get; set; }
 
         public event EventHandler SelectedNoteChanged;
@@ -61,6 +62,7 @@ namespace EvernoteClone.ViewModel
             }
         }
 
+
         public NotesVM()
         {
             NewNoteCommand = new NewNoteCommand(this);
@@ -69,6 +71,7 @@ namespace EvernoteClone.ViewModel
             Notes = new ObservableCollection<Note>();
             EditCommand = new EditCommand(this);
             EndEditCommand = new EndEditCommand(this);
+            DeleteNotebookCommand = new DeleteNotebookCommand(this);
             IsVisible = Visibility.Collapsed;
             GetNotebooks();
         }
@@ -143,6 +146,12 @@ namespace EvernoteClone.ViewModel
         public void UpdateSelectedNote()
         {
             DatabaseHelper.Update(selectedNote);
+        }
+
+        public void DeleteNotebook(Notebook notebook)
+        {
+            DatabaseHelper.Delete(notebook);
+            GetNotebooks();
         }
     }
 }

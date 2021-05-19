@@ -40,6 +40,7 @@
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename" Command="{Binding Source={StaticResource Vm}, Path=EditCommand}"/>
+                                    <MenuItem Header="Delete" Command="{Binding Source={StaticResource Vm}, Path=DeleteNotebookCommand}" CommandParameter="{Binding }"/>
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
