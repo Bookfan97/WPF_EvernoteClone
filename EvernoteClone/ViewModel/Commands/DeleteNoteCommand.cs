@@ -6,15 +6,14 @@ using EvernoteClone.Model;
 
 namespace EvernoteClone.ViewModel.Commands
 {
-    public class DeleteNotebookCommand: ICommand
+    public class DeleteNoteCommand: ICommand
     {
         public NotesVM ViewModel { get; set; }
 
-        public DeleteNotebookCommand(NotesVM view)
+        public DeleteNoteCommand(NotesVM view)
         {
             ViewModel = view;
         }
-
         public bool CanExecute(object parameter)
         {
             return true;
@@ -22,10 +21,10 @@ namespace EvernoteClone.ViewModel.Commands
 
         public void Execute(object parameter)
         {
-            Notebook notebook = parameter as Notebook;
-            if(notebook != null)
+            Note note = parameter as Note;
+            if(note != null)
             {
-                ViewModel.DeleteNotebook(notebook);
+                ViewModel.DeleteNote(note);
             }
         }
 

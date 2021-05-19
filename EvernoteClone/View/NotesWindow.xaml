@@ -58,7 +58,13 @@
         <ListView DockPanel.Dock="Left" Width="140" SelectedValue="{Binding SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <uc:DisplayNote Note="{Binding}"/>
+                    <uc:DisplayNote Note="{Binding}">
+                        <uc:DisplayNote.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete" Command="{Binding Source={StaticResource Vm}, Path=DeleteNoteCommand}" CommandParameter="{Binding }"/>
+                            </ContextMenu>
+                        </uc:DisplayNote.ContextMenu>
+                    </uc:DisplayNote>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
