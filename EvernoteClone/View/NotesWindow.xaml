@@ -80,10 +80,10 @@
             </ToolBar>
         </ToolBarTray>
         <Grid>
-            <StackPanel>
-                <TextBox Margin="10" Text="{Binding Path=SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <RichTextBox x:Name="contentRichTextBox" TextChanged="ContentRichTextBox_OnTextChanged" SelectionChanged="ContentRichTextBox_OnSelectionChanged"/>
-            </StackPanel>
+            <DockPanel>
+                <TextBox DockPanel.Dock="Top" Margin="10" Text="{Binding Path=SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                <RichTextBox DockPanel.Dock="Top" x:Name="contentRichTextBox" TextChanged="ContentRichTextBox_OnTextChanged" SelectionChanged="ContentRichTextBox_OnSelectionChanged"/>
+            </DockPanel>
         </Grid>
     </DockPanel>
 </Window>
