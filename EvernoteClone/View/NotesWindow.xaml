@@ -39,15 +39,17 @@
                         <uc:DisplayNotebook Notebook="{Binding}">
                             <uc:DisplayNotebook.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Rename" Command="{Binding Source={StaticResource Vm}, Path=EditCommand}"/>
-                                    <MenuItem Header="Delete" Command="{Binding Source={StaticResource Vm}, Path=DeleteNotebookCommand}" CommandParameter="{Binding }"/>
+                                    <MenuItem Header="Rename"
+                                              Command="{Binding Source={StaticResource Vm}, Path=EditCommand}"/>
                                 </ContextMenu>
                             </uc:DisplayNotebook.ContextMenu>
                         </uc:DisplayNotebook>
-                        <TextBox Text="{Binding Name, Mode=TwoWay}" Visibility="{Binding Source={StaticResource Vm}, Path=IsVisible}">
+                        <TextBox Text="{Binding Name, Mode=TwoWay}"
+                                 Visibility="{Binding Source={StaticResource Vm}, Path=IsVisible}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="LostFocus">
-                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource Vm}, Path=EndEditingCommand}" CommandParameter="{Binding}"/>
+                                    <i:InvokeCommandAction Command="{Binding Source={StaticResource Vm}, Path=EndEditCommand}"
+                                                           CommandParameter="{Binding}"/>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBox>
