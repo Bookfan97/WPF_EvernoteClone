@@ -7,11 +7,13 @@
         xmlns:local="clr-namespace:EvernoteClone.View"
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         xmlns:uc="clr-namespace:EvernoteClone.View.UserControls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="NotesWindow" Height="450" Width="800">
     <Window.Resources>
         <ResourceDictionary>
             <vm:NotesVM x:Key="Vm"/>
+            <vm:LoginVM x:Key="Login"/>
         </ResourceDictionary>
     </Window.Resources>
     <DockPanel DataContext="{StaticResource Vm}">
@@ -29,8 +31,7 @@
             </StatusBarItem>
         </StatusBar>
         <ListView DockPanel.Dock="Left"
-                  Background="MidnightBlue"
-                  Width="140"
+                  Width="220"
                   SelectedValue="{Binding SelectedNotebook, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Notebooks}">
             <ListView.ItemTemplate>
@@ -57,7 +58,11 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ListView DockPanel.Dock="Left" Width="140" SelectedValue="{Binding SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Notes}">
+        <ListView
+            materialDesign:ColorZoneAssist.Background="Aqua"
+            materialDesign:ScrollViewerAssist.ShowSeparators="True"
+            materialDesign:ScrollViewerAssist.CornerRectangleVisibility="Visible"
+            DockPanel.Dock="Left" Width="220" SelectedValue="{Binding SelectedNote, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Notes}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <uc:DisplayNote Note="{Binding}">
@@ -84,13 +89,28 @@
                 </ToggleButton>
                 <ComboBox x:Name="fontFamilyComboBox" Width="100" SelectionChanged="FontSizeComboBox_OnSelectionChanged"/>
                 <ComboBox x:Name="fontSizeComboBox" Width="50" IsEditable="True" TextBoxBase.TextChanged="FontSizeComboBox_OnTextChanged"/>
-                <Button Content="Save" Click="SaveButton_Click"/>
+                <Button Content="Save" Click="SaveButton_Click" Style="{DynamicResource MaterialDesignFlatAccentButton}"/>
             </ToolBar>
         </ToolBarTray>
         <Grid>
             <DockPanel>
-                <TextBox DockPanel.Dock="Top" Margin="10" Text="{Binding Path=SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-                <RichTextBox DockPanel.Dock="Top" x:Name="contentRichTextBox" TextChanged="ContentRichTextBox_OnTextChanged" SelectionChanged="ContentRichTextBox_OnSelectionChanged"/>
+                <TextBox 
+                    materialDesign:TextFieldAssist.HasOutlinedTextField="True" 
+                    materialDesign:TextFieldAssist.HasFilledTextField="True"
+                    materialDesign:TextFieldAssist.RippleOnFocusEnabled="True"
+                    materialDesign:TextFieldAssist.UnderlineBrush="Black"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    materialDesign:TextFieldAssist.HasLeadingIcon="True"
+                    materialDesign:TextFieldAssist.NewSpecHighlightingEnabled="True"
+                    DockPanel.Dock="Top" Margin="10" Text="{Binding Path=SelectedNote.Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <RichTextBox
+                    materialDesign:TextFieldAssist.HasOutlinedTextField="True" 
+                    materialDesign:TextFieldAssist.HasFilledTextField="True"
+                    materialDesign:TextFieldAssist.RippleOnFocusEnabled="True"
+                    materialDesign:TextFieldAssist.UnderlineBrush="Black"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+
+                    DockPanel.Dock="Top" x:Name="contentRichTextBox" TextChanged="ContentRichTextBox_OnTextChanged" SelectionChanged="ContentRichTextBox_OnSelectionChanged"/>
             </DockPanel>
         </Grid>
     </DockPanel>

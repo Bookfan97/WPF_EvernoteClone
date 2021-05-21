@@ -8,8 +8,9 @@
         xmlns:vm="clr-namespace:EvernoteClone.ViewModel"
         xmlns:helpers="clr-namespace:EvernoteClone.ViewModel.Helpers"
         xmlns:userControls="clr-namespace:EvernoteClone.View.UserControls"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Login" Height="300" Width="300">
+        Title="Login" Height="400" Width="300">
     <Window.Resources>
         <ResourceDictionary>
             <vm:LoginVM x:Key="vm"/>
@@ -18,16 +19,22 @@
     <Grid DataContext="{StaticResource vm}">
         <StackPanel Visibility="{Binding LoginVisibility}"
                     Margin="10">
-            <TextBlock Text="Email:"/>
-            <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Password:"/>
+            <TextBox 
+                Margin="20, 40, 20, 5"
+                materialDesign:HintAssist.Hint="Email"
+                materialDesign:HintAssist.Foreground="Black"
+                materialDesign:TextFieldAssist.UnderlineBrush="Black"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                />
             <userControls:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Command="{Binding LoginCommand}"
                     CommandParameter="{Binding User}"
-                    Margin="0,5"
+                    Margin="20,60,20, 20"
                     Content="Login"/>
             <TextBlock Text="Register"
-                       Foreground="DodgerBlue"
+                       Margin="20,60,20, 20"
+                       Foreground="Black"
                        TextDecorations="Underline">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">
@@ -38,22 +45,35 @@
         </StackPanel>
         <StackPanel Visibility="{Binding RegisterVisibility}"
                     Margin="10,0">
-            <TextBlock Text="Email:"/>
-            <TextBox Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Name:"/>
-            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Lastname:"/>
-            <TextBox Text="{Binding Lastname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Password:"/>
+            <TextBox
+                Margin="20, 5"
+                materialDesign:HintAssist.Hint="Email"
+                materialDesign:HintAssist.Foreground="Black"
+                materialDesign:TextFieldAssist.UnderlineBrush="Black"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                Text="{Binding Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox
+                Margin="20, 5"
+                materialDesign:HintAssist.Hint="First Name"
+                materialDesign:HintAssist.Foreground="Black"
+                materialDesign:TextFieldAssist.UnderlineBrush="Black"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox 
+                Margin="20, 5"
+                materialDesign:HintAssist.Hint="Last Name"
+                materialDesign:HintAssist.Foreground="Black"
+                materialDesign:TextFieldAssist.UnderlineBrush="Black"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                Text="{Binding Lastname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <userControls:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-            <TextBlock Text="Confirm password:"/>
             <userControls:BindablePasswordBox Password="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             <Button Command="{Binding RegisterCommand}"
                     CommandParameter="{Binding User}"
                     Margin="0,5"
                     Content="Register"/>
             <TextBlock Text="Login"
-                       Foreground="DodgerBlue"
+                       Foreground="Black"
                        TextDecorations="Underline">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseLeftButtonDown">

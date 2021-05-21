@@ -4,10 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:EvernoteClone.View.UserControls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="100" d:DesignWidth="300">
     <StackPanel>
-        <TextBlock Text="{Binding Title}" Foreground="Black" Margin="15,15,15,0" FontSize="20" FontWeight="Bold" VerticalAlignment="Center"/>
-        <TextBlock Text="{Binding UpdatedAt}" Foreground="DodgerBlue" Margin="15,5,15,15" FontSize="10" FontWeight="Bold" VerticalAlignment="Center"/>
+        <materialDesign:Card>
+        <TextBlock 
+            Text="{Binding Title}" 
+            Foreground="White" 
+            Margin="15,15,15,15" 
+            FontSize="20" 
+            FontWeight="Bold" 
+            VerticalAlignment="Center"/>
+        </materialDesign:Card>
+        <materialDesign:Badged Background="AliceBlue">
+            <TextBlock Text="{Binding UpdatedAt}" Foreground="DodgerBlue" Margin="15,5,15,15" FontSize="10" FontWeight="Bold" VerticalAlignment="Center"/>
+        </materialDesign:Badged>
     </StackPanel>
 </UserControl>
